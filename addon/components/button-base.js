@@ -56,8 +56,8 @@ export default Component.extend({
       return get(this, 'event.duration');
     }
 
-    let start = get(this, 'startTime'),
-        end = get(this, 'endTime');
+    let start = this._getStartTime(),
+        end = this._getEndTime();
 
     return start.diff(end);
   }),

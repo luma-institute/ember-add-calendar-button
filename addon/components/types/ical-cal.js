@@ -10,12 +10,15 @@ const doc = document || {URL: false}
 export default Base.extend({
   layout,
   attributeBindings: ['download'],
-  download: computed('event', function() {
-    let title = `${get(this, 'event.title')}-${get(this, 'startTime').format('YYYY-MM-DD')}`
+
+  download: computed('event.@each', function() {
+    let event = this.get('event');
+    let title = `${get(event, 'title')}-${get(event, 'start').format('YYYY-MM-DD')}`
     let safe = dasherize(title)
     return `${safe
     }.ics`;
   }),
+
   generateHref({startTime = '', endTime = '', location = '', title = '', description = ''}){
     if (!moment.isMoment(startTime)) {
       startTime = moment(startTime);
