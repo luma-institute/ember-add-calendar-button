@@ -1,30 +1,27 @@
 import Component from '@ember/component';
 import layout from '../templates/components/button-base';
 import moment from 'moment';
-import { assert } from '@ember/debug';
-import { get, getWithDefault, computed } from '@ember/object';
+import {assert} from '@ember/debug';
+import {get, getWithDefault, computed} from '@ember/object';
 import {alias} from '@ember/object/computed';
 
 export default Component.extend({
-  attributeBindings: ['href', 'target'],
-  tagName: 'a',
-  target: '_blank',
-
   layout,
-
   didRecieveAttrs() {
     this._super(...arguments);
     assert('`tagName` must be `a`', get(this, 'tagName') === 'a')
   },
-
+  attributeBindings: ['href', 'target'],
+  tagName: 'a',
+  target: '_blank',
   href: computed('event.@each', function() {
-    const event = get(this, 'event');
+    let event = get(this, 'event');
     let args = {
-      startTime: this._starTime(),
-      duration: this._duration(),
-      endTime: this._endTime(),
+      startTime: _getstartTime(),
+      duration: _getEndTime(),
+      endTime: _getDuration(),
       location: get(event, 'location'),
-      description: getWithDefault(event, 'description', ''),
+      description: get(event, 'description'),
       title: get(event, 'title')
     };
 
@@ -38,38 +35,32 @@ export default Component.extend({
   click(event) {
     get(this, 'onClick')(event);
   },
-
-  /* PRIVATE FUNCTIONS
-  --------------------------------------------------------------------------------------------------------------------*/
-  _starTime() {
-    const start = this.get('event.start');
-    return moment.isMoment(start) ? start : moment(start);
-  },
-
-  _endTime() {
-    const start = this.get('event.start');
-    const end = this.get('event.end') || false;
+  //Properties
+  _getStartTime() {
+    let start = get(this, 'event.start');
+    return (moment.isMoment(start)) ? start : moment(start);
+  }),
+  _getEndTime() {
+    let start = get(this, 'event.start');
+    let end = get(this, 'event.end') || false;
 
     if (end) {
-      return moment.isMoment(end) ? end : moment(end);
+      return (moment.isMoment(end)) ? end : moment(end);
     }
 
     return start.add(90, 'minutes');
-  },
+  }),
 
-  _duration() {
-    const event = this.get('event');
-    const duration = this.get('event.duration');
-
-    if (duration) {
-      return duration;
+  _getDuration() {
+    if (get(this, 'event.duration')) {
+      return get(this, 'event.duration');
     }
 
-    let start = this.get('event.start'),
-        end = this.get('event.end');
+    let start = get(this, 'startTime'),
+        end = get(this, 'endTime');
 
     return start.diff(end);
-  },
+  }),
 
   // Must Implment by exented component
   // Should return encodeURI()'d string
