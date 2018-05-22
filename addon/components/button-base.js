@@ -17,9 +17,9 @@ export default Component.extend({
   href: computed('event.@each', function() {
     let event = get(this, 'event');
     let args = {
-      startTime: _getstartTime(),
-      duration: _getEndTime(),
-      endTime: _getDuration(),
+      startTime: this._getStartTime(),
+      duration: this._getEndTime(),
+      endTime: this._getDuration(),
       location: get(event, 'location'),
       description: get(event, 'description'),
       title: get(event, 'title')
@@ -39,7 +39,7 @@ export default Component.extend({
   _getStartTime() {
     let start = get(this, 'event.start');
     return (moment.isMoment(start)) ? start : moment(start);
-  }),
+  },
   _getEndTime() {
     let start = get(this, 'event.start');
     let end = get(this, 'event.end') || false;
@@ -49,18 +49,18 @@ export default Component.extend({
     }
 
     return start.add(90, 'minutes');
-  }),
+  },
 
   _getDuration() {
     if (get(this, 'event.duration')) {
       return get(this, 'event.duration');
     }
 
-    let start = get(this, 'startTime'),
-        end = get(this, 'endTime');
+    let start = this._getStartTime(),
+        end = this._getEndTime();
 
     return start.diff(end);
-  }),
+  },
 
   // Must Implment by exented component
   // Should return encodeURI()'d string
