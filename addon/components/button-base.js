@@ -18,8 +18,8 @@ export default Component.extend({
     let event = get(this, 'event');
     let args = {
       startTime: this._getStartTime(),
-      duration: this._getEndTime(),
-      endTime: this._getDuration(),
+      duration: this._getDuration(),
+      endTime: this._getEndTime(),
       location: get(event, 'location'),
       description: get(event, 'description'),
       title: get(event, 'title')
