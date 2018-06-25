@@ -26,6 +26,9 @@ export default Base.extend({
     if (!moment.isMoment(endTime)) {
       endTime = moment(endTime);
     }
+    if (description) {
+      description = description.replace(/<br\s*\/?>/ig, "\\n").replace(/<(?:.|\n)*?>/gm, '');
+    }
     let start = startTime.format('YYYYMMDDTHHmmss');
     let end = endTime.format('YYYYMMDDTHHmmss');
 
