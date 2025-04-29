@@ -1,6 +1,6 @@
 
 
-{{#if hasBlock}}
+{{#if (has-block)}}
   {{yield
     (hash
       google=(component "types/google-cal" event=event onClick=(action "onClick"))
